@@ -1,0 +1,23 @@
+{
+  "name": "test-react-fundamentals",
+  "version": "1.0.0",
+  "description": "React Fundamentals App of Egghead.io course",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedrofelipefroes/test-react-fundamentals.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pedrofelipefroes/test-react-fundamentals/issues"
+  },
+  "homepage": "https://github.com/pedrofelipefroes/test-react-fundamentals#readme",
+  "dependencies": {
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1"
+  }
+}
