@@ -68,36 +68,89 @@ import React from 'react';
 
 /*** 06 OWNER OWNEE RELATIONSHIP ***/
 
+//class App extends React.Component {
+//  constructor() {
+//    super();
+//    
+//    this.state = { txt: '' }
+//    this.update = this.update.bind(this)
+//  }
+//  
+//  update(e) {
+//    this.setState({
+//      txt: e.target.value
+//    })
+//  }
+//  
+//  render() {
+//    return (
+//      <div>
+//        <Widget txt={ this.state.txt } update={ this.update }/>
+//      </div>
+//    );
+//  }
+//}
+//
+//const Widget = (props) => {
+//  return (
+//    <div>
+//      <input type="text" onChange={ props.update }/>
+//      <h1>{ props.txt }</h1>
+//    </div>
+//  );
+//}
+//
+//export default App
+
+/*** 07 USING REFS TO ACCESS COMPONENTS ***/
+
+import ReactDOM from 'react-dom';
+
 class App extends React.Component {
   constructor() {
     super();
     
-    this.state = { txt: '' }
+    this.state = {
+      red: 0,
+      green: 0,
+      blue: 0
+    }
     this.update = this.update.bind(this)
   }
   
   update(e) {
     this.setState({
-      txt: e.target.value
+      red: ReactDOM.findDOMNode(this.refs.red.refs.slide).value,
+      green: ReactDOM.findDOMNode(this.refs.green.refs.slide).value,
+      blue: ReactDOM.findDOMNode(this.refs.blue.refs.slide).value
     })
   }
   
   render() {
     return (
       <div>
-        <Widget txt={ this.state.txt } update={ this.update }/>
+        <Slider ref="red" update={ this.update }/>
+        { this.state.red }
+        <br/>
+        <Slider ref="green" update={ this.update }/>
+        { this.state.green }
+        <br/>
+        <Slider ref="blue" update={ this.update }/>
+        { this.state.blue }
+        <br/>
       </div>
     );
   }
 }
 
-const Widget = (props) => {
-  return (
-    <div>
-      <input type="text" onChange={ props.update }/>
-      <h1>{ props.txt }</h1>
-    </div>
-  );
+class Slider extends React.Component {
+  render() {
+    return (
+      <div>
+      <input ref="slide" type="range" min="0" max="255" onChange={ this.props.update }/>
+      </div>
+    );
+  }
 }
 
 export default App
