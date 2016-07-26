@@ -104,53 +104,89 @@ import React from 'react';
 
 /*** 07 USING REFS TO ACCESS COMPONENTS ***/
 
+//import ReactDOM from 'react-dom';
+//
+//class App extends React.Component {
+//  constructor() {
+//    super();
+//    
+//    this.state = {
+//      red: 0,
+//      green: 0,
+//      blue: 0
+//    }
+//    this.update = this.update.bind(this)
+//  }
+//  
+//  update(e) {
+//    this.setState({
+//      red: ReactDOM.findDOMNode(this.refs.red.refs.slide).value,
+//      green: ReactDOM.findDOMNode(this.refs.green.refs.slide).value,
+//      blue: ReactDOM.findDOMNode(this.refs.blue.refs.slide).value
+//    })
+//  }
+//  
+//  render() {
+//    return (
+//      <div>
+//        <Slider ref="red" update={ this.update }/>
+//        { this.state.red }
+//        <br/>
+//        <Slider ref="green" update={ this.update }/>
+//        { this.state.green }
+//        <br/>
+//        <Slider ref="blue" update={ this.update }/>
+//        { this.state.blue }
+//        <br/>
+//      </div>
+//    );
+//  }
+//}
+//
+//class Slider extends React.Component {
+//  render() {
+//    return (
+//      <div>
+//      <input ref="slide" type="range" min="0" max="255" onChange={ this.props.update }/>
+//      </div>
+//    );
+//  }
+//}
+
+/*** 11 COMPONENT LIFECYCLE - UPDATING ***/
+
 import ReactDOM from 'react-dom';
 
 class App extends React.Component {
   constructor() {
     super();
     
-    this.state = {
-      red: 0,
-      green: 0,
-      blue: 0
-    }
     this.update = this.update.bind(this)
+    this.state = { increase: false }
   }
   
-  update(e) {
-    this.setState({
-      red: ReactDOM.findDOMNode(this.refs.red.refs.slide).value,
-      green: ReactDOM.findDOMNode(this.refs.green.refs.slide).value,
-      blue: ReactDOM.findDOMNode(this.refs.blue.refs.slide).value
-    })
+  update() {
+    ReactDOM.render(
+      <App val={ this.props.val + 1 }/>, document.getElementById("app")
+    );
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    this.setState({ increase: nextProps.val > this.props.val })
+  }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.val % 5 === 0;
   }
   
   render() {
+    console.log(this.state.increase);
     return (
-      <div>
-        <Slider ref="red" update={ this.update }/>
-        { this.state.red }
-        <br/>
-        <Slider ref="green" update={ this.update }/>
-        { this.state.green }
-        <br/>
-        <Slider ref="blue" update={ this.update }/>
-        { this.state.blue }
-        <br/>
-      </div>
-    );
+      <button onClick={ this.update }>{ this.props.val }</button>
+    )
   }
 }
 
-class Slider extends React.Component {
-  render() {
-    return (
-      <div>
-      <input ref="slide" type="range" min="0" max="255" onChange={ this.props.update }/>
-      </div>
-    );
-  }
-}
+App.defaultProps = { val: 0 }
 
 export default App
