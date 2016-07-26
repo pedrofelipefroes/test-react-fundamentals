@@ -191,40 +191,102 @@ import React from 'react';
 
 /*** 12 HIGHER ORDER COMPONENTS ***/
 
-let Mixin = InnerComponent => class extends React.Component {
+//let Mixin = InnerComponent => class extends React.Component {
+//  constructor() {
+//    super();
+//    
+//    this.update = this.update.bind(this)
+//    this.state = { val: 0 }
+//  }
+//  
+//  update() {
+//    this.setState({ val: this.state.val + 1 })
+//  }
+//  
+//  render() {
+//    return (
+//      <InnerComponent update={this.update} {...this.state} {...this.props}/>
+//    )
+//  }
+//}
+//
+//const Button = (props) => <button onClick={props.update}>{props.txt}: {props.val}</button>
+//const Label = (props) => <label onMouseMove={props.update}>{props.txt}: {props.val}</label>
+//
+//let ButtonMixed = Mixin(Button)
+//let LabelMixed = Mixin(Label)
+//
+//class App extends React.Component {
+//  render() {
+//    return (
+//      <div>
+//        <LabelMixed txt="The Black Keys"/>
+//        <ButtonMixed txt="Lana Del Rey"/>
+//      </div>
+//    )
+//  }
+//}
+
+/*** 13 COMPOSABLE COMPONENTS ***/
+
+import ReactDOM from 'react-dom';
+
+class App extends React.Component {
   constructor() {
     super();
     
+    this.state = {
+      red: 0,
+    }
     this.update = this.update.bind(this)
-    this.state = { val: 0 }
   }
   
-  update() {
-    this.setState({ val: this.state.val + 1 })
+  update(e) {
+    this.setState({
+      red: ReactDOM.findDOMNode(this.refs.red.refs.slide).value,
+    })
   }
   
-  render() {
-    return (
-      <InnerComponent update={this.update} {...this.state} {...this.props}/>
-    )
-  }
-}
-
-const Button = (props) => <button onClick={props.update}>{props.txt}: {props.val}</button>
-const Label = (props) => <label onMouseMove={props.update}>{props.txt}: {props.val}</label>
-
-let ButtonMixed = Mixin(Button)
-let LabelMixed = Mixin(Label)
-
-class App extends React.Component {
   render() {
     return (
       <div>
-        <LabelMixed txt="The Black Keys"/>
-        <ButtonMixed txt="Lana Del Rey"/>
+        <Slider ref="red" type="range" min={0} max={255} step={1} val={+this.state.red} label="red" update={this.update}/>
       </div>
-    )
+    );
   }
+}
+
+class Slider extends React.Component {
+  render() {
+    return (
+      <div>
+      <input ref="slide" type={this.props.type} min={this.props.min} max={this.props.max} 
+             step={this.props.step} defaultValue={this.props.val} onChange={this.props.update}/>
+      {this.props.label}
+      <br/>
+      {this.props.val}
+      </div>
+    );
+  }
+}
+
+Slider.propTypes = {
+  min: React.PropTypes.number,
+  max: React.PropTypes.number,
+  step: React.PropTypes.number,
+  val: React.PropTypes.number,
+  label: React.PropTypes.string,
+  update: React.PropTypes.func.isRequired,
+  type: React.PropTypes.oneOf(['range', 'number'])
+}
+
+Slider.defaultProps = {
+  min: 0,
+  max: 255,
+  step: 1,
+  val: 0,
+  label: '',
+  type: 'range'
 }
 
 export default App
